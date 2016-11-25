@@ -39,7 +39,7 @@ abstract class UrlRoute extends ActiveRecord implements UrlRouteInterface
     {
         return [
             [['path', 'action_key'], 'required'],
-            [['object_id'], 'integer'],
+            [['object_id', 'language_id'], 'integer'],
             [['action_key', 'object_key'], 'string', 'max' => 30],
             ['http_code', 'integer', 'min' => 100, 'max' => 511],
             [['path', 'url_to'], 'string', 'max' => 255],
@@ -60,6 +60,7 @@ abstract class UrlRoute extends ActiveRecord implements UrlRouteInterface
             'action_key' => Yii::t('vendor/voskobovich/yii2-seo-toolkit/models/urlRoute', 'Action'),
             'object_key' => Yii::t('vendor/voskobovich/yii2-seo-toolkit/models/urlRoute', 'Object'),
             'object_id' => Yii::t('vendor/voskobovich/yii2-seo-toolkit/models/urlRoute', 'ID'),
+            'language_id' => Yii::t('vendor/voskobovich/yii2-seo-toolkit/models/urlRoute', 'Language ID'),
             'http_code' => Yii::t('vendor/voskobovich/yii2-seo-toolkit/models/urlRoute', 'HTTP Code'),
             'url_to' => Yii::t('vendor/voskobovich/yii2-seo-toolkit/models/urlRoute', 'Destination URL'),
         ];
@@ -122,7 +123,8 @@ abstract class UrlRoute extends ActiveRecord implements UrlRouteInterface
             if (($actionKey = array_search($route, $actions)) !== false) {
                 return [
                     'object_key' => $objectKey,
-                    'action_key' => $actionKey
+                    'action_key' => $actionKey,
+                    
                 ];
             }
         }
@@ -176,13 +178,14 @@ abstract class UrlRoute extends ActiveRecord implements UrlRouteInterface
      * @param $path
      * @return bool
      */
-    public static function add($objectKey, $objectId, $path)
+    public static function add($objectKey, $objectId, $languageId, $path)
     {
         /** @var static $model */
         $model = static::find()
             ->andWhere([
                 'object_key' => $objectKey,
-                'object_id' => $objectId
+                'object_id' => $objectId,
+                'language_id' => $languageId
             ])
             ->one();
 

@@ -9,7 +9,7 @@ use yii\db\Migration;
  * Class create_table__url_route
  * @package voskobovich\seo\migrations
  */
-abstract class create_table__url_route extends Migration
+class create_table__url_route extends Migration
 {
     private $_tableName = '{{%url_route}}';
 
@@ -23,7 +23,8 @@ abstract class create_table__url_route extends Migration
 
         $this->createTable($this->_tableName, [
             'id' => $this->primaryKey(),
-            'path' => $this->string()->notNull(),
+            'language_id' => $this->smallInteger(3),
+            'path' => $this->string()->notNull(),            
             'action_key' => $this->string(30)->notNull(),
             'object_key' => $this->string(30),
             'object_id' => $this->integer(),

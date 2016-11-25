@@ -12,5 +12,5 @@ interface SeoModelInterface
      * Build Seo Path
      * @return string|null;
      */
-    public function getSeoPath();
+    //public function getSeoPath();
 }

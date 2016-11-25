@@ -19,8 +19,7 @@ abstract class BaseUrlBehavior extends Behavior
      * UrlRoute model namespace
      * @var string
      */
-    public $modelClass;
-
+    public $routeModelClass;
     /**
      * UrlRoute object key
      * @var int
@@ -45,16 +44,18 @@ abstract class BaseUrlBehavior extends Behavior
      */
     public function init()
     {
+        
+        
         if ($this->objectKey == null) {
             throw new InvalidConfigException('Param "actionKey" must be contain object key.');
         }
 
-        if (!$this->modelClass) {
-            throw new InvalidConfigException('Param "modelClass" can not be empty.');
+        if (!$this->routeModelClass) {
+            throw new InvalidConfigException('Param "routeModelClass" can not be empty.');
         }
 
-        if (!is_subclass_of($this->modelClass, UrlRoute::className())) {
-            throw new InvalidConfigException('Object "modelClass" must be implemented ' . UrlRoute::className());
+        if (!is_subclass_of($this->routeModelClass, UrlRoute::className())) {
+            throw new InvalidConfigException('Object "routeModelClass" must be implemented ' . UrlRoute::className());
         }
 
         parent::init();

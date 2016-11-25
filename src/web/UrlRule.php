@@ -20,7 +20,7 @@ class UrlRule extends Object implements UrlRuleInterface
      * UrlRoute model namespace
      * @var string
      */
-    public $modelClass;
+    public $routeModelClass;
 
     /**
      * Paths to skip
@@ -41,12 +41,12 @@ class UrlRule extends Object implements UrlRuleInterface
      */
     public function init()
     {
-        if (!$this->modelClass) {
-            throw new InvalidConfigException('Param "modelClass" can not be empty.');
+        if (!$this->routeModelClass) {
+            throw new InvalidConfigException('Param "routeModelClass" can not be empty.');
         }
 
-        if (!is_subclass_of($this->modelClass, UrlRoute::className())) {
-            throw new InvalidConfigException('Object "modelClass" must be implemented ' . UrlRoute::className());
+        if (!is_subclass_of($this->routeModelClass, UrlRoute::className())) {
+            throw new InvalidConfigException('Object "routeModelClass" must be implemented ' . UrlRoute::className());
         }
 
         parent::init();
@@ -68,7 +68,8 @@ class UrlRule extends Object implements UrlRuleInterface
         }
 
         /** @var UrlRoute $model */
-        $model = $this->modelClass;
+        
+        $model = $this->routeModelClass;
         $model = $model::find()
             ->andWhere(['path' => $request->getPathInfo()])
             ->one();
@@ -110,18 +111,21 @@ class UrlRule extends Object implements UrlRuleInterface
         }
 
         /** @var UrlRoute $model */
-        $model = $this->modelClass;
+        $model = $this->routeModelClass;
         $routeParams = $model::getRouteParamsByName($route);
         if (empty($params)) {
             return false;
         }
+        
+        
 
-        $cacheKey = $this->modelClass . '::createUrl:' . $routeParams['action_key'] . '-' . $routeParams['object_key'];
+        $cacheKey = $this->routeModelClass . '::createUrl:' . $routeParams['action_key'] . '-' . $routeParams['object_key'];
         $query = $model::find()
             ->select(['action_key', 'object_key', 'path'])
             ->andWhere([
                 'action_key' => $routeParams['action_key'],
                 'object_key' => $routeParams['object_key'],
+                'language_id' =>Yii::$app->multilingual->language_id,
             ]);
 
         if (!empty($params['id'])) {
