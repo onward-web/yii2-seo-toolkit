@@ -1,11 +1,10 @@
 <?php
 namespace voskobovich\seo\traits;
 
-
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use voskobovich\seo\behaviors\CreateUrlBehavior;
+
 
 trait SeoTrait
 {
