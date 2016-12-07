@@ -37,6 +37,8 @@ class CreateUrlBehavior extends Behavior
     
     public $objectKey;
     
+    public $object_id;
+    
     public $defaultRouteRelation = 'defaultRoute';
     
     /**
@@ -177,11 +179,12 @@ class CreateUrlBehavior extends Behavior
      */
     public function afterValidate()
     {
+        /*
         if (!Model::validateMultiple($this->owner->{$this->routeRelation})) {
-            /* @var ActiveRecord $owner  */
+            / @var ActiveRecord $owner  /
             $owner = $this->owner;
             $owner->addError($this->routeRelation);
-        }
+        }*/
     }
 
     /**
@@ -199,6 +202,19 @@ class CreateUrlBehavior extends Behavior
         $owner->populateRelation($this->routeRelation, []);
 
         foreach ($paths as $path) {
+            
+            if(!isset($path['action_key'])){
+                $path['action_key'] = $this->actionKey;
+            }
+            
+            if(!isset($path['object_key'])){
+                $path['object_key'] = $this->objectKey;
+            }
+            
+            if(!isset($path['object_id'])){
+                $path['object_id'] = $this->owner->getPrimaryKey();
+            }
+            
             $owner->link($this->routeRelation, $path);
         }
         // now all translations saved and are in _related !
@@ -208,7 +224,7 @@ class CreateUrlBehavior extends Behavior
     /**
      * @return boolean
      */
-    public function beforeDelete(ModelEvent $event)
+    public function beforeDelete($event)
     {
         $result = $event->isValid;
         if ($result !== false) {

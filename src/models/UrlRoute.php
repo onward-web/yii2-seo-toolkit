@@ -1,5 +1,4 @@
 <?php
-
 namespace voskobovich\seo\models;
 
 use voskobovich\seo\interfaces\UrlRouteInterface;
