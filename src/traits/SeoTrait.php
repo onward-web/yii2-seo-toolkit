@@ -1,6 +1,7 @@
 <?php
 namespace voskobovich\seo\traits;
 
+
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -20,7 +21,7 @@ trait SeoTrait
     public function getDefaultRoute()
     {
         /** @var \yii\db\ActiveRecord|\voskobovich\seo\behaviors\CreateUrlBehavior $this */
-        return $this->hasOne($this->getRouteModelClassName(), [$this->object_id => 'id'])
+        return $this->hasOne($this->getRouteModelClassName(), ['object_id' => 'id'])
             ->where([static::getRouteTableName() . '.language_id' => Yii::$app->multilingual->language_id,
                      'action_key' => $this->actionKey, 'object_key' => $this->objectKey]);
     }
