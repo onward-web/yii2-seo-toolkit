@@ -37,7 +37,7 @@ abstract class UrlRoute extends ActiveRecord implements UrlRouteInterface
     public function rules()
     {
         return [
-            [['path', 'action_key'], 'required'],
+            [['action_key'], 'required'],
             [['object_id', 'language_id'], 'integer'],
             [['action_key', 'object_key'], 'string', 'max' => 30],
             ['http_code', 'integer', 'min' => 100, 'max' => 511],
