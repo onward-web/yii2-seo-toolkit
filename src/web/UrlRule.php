@@ -104,6 +104,7 @@ class UrlRule extends Object implements UrlRuleInterface
      */
     public function createUrl($manager, $route, $params)
     {
+        
         foreach ($this->skip as $item) {
             if (strpos($route, $item) !== false) {
                 return false;
@@ -117,16 +118,17 @@ class UrlRule extends Object implements UrlRuleInterface
             return false;
         }
         
-        
-
-        $cacheKey = $this->routeModelClass . '::createUrl:' . $routeParams['action_key'] . '-' . $routeParams['object_key'];
+       
+        $cacheKey = $this->routeModelClass . '::createUrl:' . $routeParams['action_key'] . '-' . $routeParams['object_key'] . '-'.$params[$this->getLanguageParam()];
         $query = $model::find()
             ->select(['action_key', 'object_key', 'path'])
             ->andWhere([
                 'action_key' => $routeParams['action_key'],
                 'object_key' => $routeParams['object_key'],
-                'language_id' =>Yii::$app->multilingual->language_id,
+                'language_id' => $params[$this->getLanguageParam()],
             ]);
+        
+        unset($params[$this->languageParam]);
 
         if (!empty($params['id'])) {
             $cacheKey .= '-' . $params['id'];
@@ -152,7 +154,21 @@ class UrlRule extends Object implements UrlRuleInterface
 
             Yii::$app->cache->set($cacheKey, $url, $this->cacheDuration);
         }
+        
+        
 
         return $url;
     }
+    
+    
+    public function getLanguageParam(){
+        return Yii::$app->urlManager->languageParam;
+    }
+    
+    public function getContextParam(){
+        return Yii::$app->urlManager->contextParam;
+        
+    }
+    
+    
 }
